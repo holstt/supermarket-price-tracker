@@ -1,8 +1,10 @@
+import logging
+from pathlib import Path
 from time import sleep
 import requests
-from supermarket_price_tracker.rema.category_dto import CategoryDto, category_dto_from_dict
-from supermarket_price_tracker.rema.department_dtos import DepartmentCategoryDto, RemaDepartmentDto, rema_dto_from_dict
-
+from src.rema.category_dto import CategoryDto, category_dto_from_dict
+from src.rema.department_dtos import DepartmentCategoryDto, RemaDepartmentDto, rema_dto_from_dict
+import json
 
 URL_DEPARTMENTS = "https://cphapp.rema1000.dk/api/v1/catalog/store/1/departments-v2"
 
@@ -11,15 +13,21 @@ URL_CATEGORY = "https://flwdn2189e-dsn.algolia.net/1/indexes/aws-prod-products/q
 
 
 def get_rema_data():
+    logging.info("Fetching data from Rema...")
+    logging.info("Fetching all departments...")
     departmentDtos = fetch_departments()
     # iterate over departments and categories, then fetch products in each category
     for department in departmentDtos:
-        print(f"Fetching department {department.id}: {department.name}...")
+        logging.info(f"Department {department.id}: {department.name}...")
         for category in department.categories:
-            print(f"-Fetching category {category.id}: {category.name}...")
-            categoryDto = fetch_products(category.id)
+            logging.info(f"-Category {category.id}: {category.name}...")
+            logging.info(f"Fetching products in category...")
+            categoryJson: dict = fetch_products_json(category.id)
+            logging.info(f"Saving products to file...")
+            with open(f'data/category_{category.id}.json', 'w') as f:
+                json.dump(categoryJson, f)
             sleep(2)
-            print(f"--Products in category: {len(categoryDto.hits)}")
+            # print(f"--Products in category: {len(categoryDto.hits)}")
 
     # TODO: Convert to domain objects
 
@@ -27,9 +35,7 @@ def get_rema_data():
 # Example category: 655370
 
 
-def fetch_products(category_id: int):
-    # post request to get products in category
-    # make body
+def fetch_products_json(category_id: int):
     body = {
         "params": "query",
         "hitsPerPage": 1000,
@@ -37,15 +43,16 @@ def fetch_products(category_id: int):
         "facetFilters": [f"category_id:{category_id}"]
     }
 
-    # post request
     response = requests.post(URL_CATEGORY, json=body)
     response.raise_for_status()
-    # Convert json response to dtos
     json: dict = response.json()
 
-    category: CategoryDto = category_dto_from_dict(json)
+    return json
 
-    return category
+    # Convert json response to dtos
+    # category: CategoryDto = category_dto_from_dict(json)
+
+    # return category
 
 
 def fetch_departments():
