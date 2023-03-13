@@ -101,9 +101,5 @@ class RemaDepartmentDto:
         return result
 
 
-def rema_dto_from_dict(s: Any) -> List[RemaDepartmentDto]:
+def departments_dto_from_json(s: Any) -> List[RemaDepartmentDto]:
     return from_list(RemaDepartmentDto.from_dict, s)
-
-
-def rema_dto_to_dict(x: List[RemaDepartmentDto]) -> Any:
-    return from_list(lambda x: to_class(RemaDepartmentDto, x), x)

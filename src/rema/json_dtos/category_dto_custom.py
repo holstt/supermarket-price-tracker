@@ -4,6 +4,8 @@ from enum import Enum
 from datetime import datetime
 import dateutil.parser
 
+# Not in use. Custom classes, not using optional for all fields.
+
 T = TypeVar("T")
 EnumT = TypeVar("EnumT", bound=Enum)
 
