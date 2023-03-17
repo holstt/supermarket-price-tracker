@@ -1,7 +1,7 @@
 from src.rema.client import save_rema_data
 import logging
 import time
-
+import asyncio
 
 # Setup logging
 logging.basicConfig(
@@ -13,5 +13,12 @@ logging.Formatter.converter = time.gmtime  # Use UTC
 logger = logging.getLogger(__name__)
 
 # TODO: Convert to domain objects and store in database
-# Save rema data to json.
-save_rema_data()
+async def main():
+    # Save rema data to json.
+    await save_rema_data()
+
+if __name__ == '__main__':
+    try:
+        asyncio.run(main())
+    except Exception as e:
+        raise Exception(f"Unhandled exception occurred: {e}") from e
