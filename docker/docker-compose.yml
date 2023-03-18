@@ -1,7 +1,7 @@
 version: "3.8"
 
 services:
-  garmin-bot:
+  supermarket-pricer-tracker:
     restart: "no" # Runs as script, not as service (right now)
     build:
       context: ..

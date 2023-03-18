@@ -32,13 +32,13 @@ async def save_rema_data():
     data_folder_path = Path("data", NAME, datetime.utcnow().strftime("%Y-%m-%d__%H-%M-%S"))
     data_folder_path.mkdir(parents=True, exist_ok=False)
     logging.info(f"Created folder for data: {data_folder_path}")
-    
+
     logging.info("Requesting: All departments")
     departmentDtos = _fetch_departments()
-    
+
     total_departments = len(departmentDtos)
     total_categories = sum(len(department.categories) for department in departmentDtos)
-    
+
     logging.info(
         f"Found {total_departments} departments and {total_categories} categories")
 
@@ -46,11 +46,11 @@ async def save_rema_data():
 
     estimated_fetch_duration =  timedelta(seconds=(total_categories * (INTERVAL_MIN_SECONDS + INTERVAL_MAX_SECONDS)) / 2)
     estimated_fetch_end_time = datetime.utcnow() + estimated_fetch_duration
-    
+
     logging.info(f"Estimated fetch time: {estimated_fetch_duration} (End time: {estimated_fetch_end_time})")
 
     start_time = datetime.utcnow()
-         
+
     # iterate over departments and categories, then fetch products in each category
     for idx, department in enumerate(departmentDtos):
         logging.info(
@@ -67,7 +67,7 @@ async def save_rema_data():
             logging.info(f"Waiting {wait:.1f} seconds...")
             await asyncio.sleep(wait)
 
-            # logging.info(f"--Products in category: {len(categoryDto.hits)}")
+            # logging.info(f"--Products in category: {len(categoryDto.hits)}") # TODO: print num products and see if any product requests reaches 1000
     # log we are done at end time and how long it acutally took
     end_time = datetime.utcnow()
     logging.info(f"Done fetching data from Rema. Took {end_time - start_time} (Estimated: {estimated_fetch_duration})")
