@@ -4,7 +4,6 @@ version = "0.1.0"
 description = ""
 authors = ["roedebaron <45661813+roedebaron@users.noreply.github.com>"]
 readme = "README.md"
-packages = [{include = "supermarket_price_tracker"}]
 
 [tool.poetry.dependencies]
 python = "^3.10"

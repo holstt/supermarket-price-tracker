@@ -1,0 +1,13 @@
+version: "3.8"
+
+services:
+  garmin-bot:
+    restart: "no" # Runs as script, not as service (right now)
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    # volume for saving json files
+    volumes:
+      - ../data:/app/data
+    environment:
+      - PYTHONUNBUFFERED=1 # Prevents Python from buffering stdout and stderr
