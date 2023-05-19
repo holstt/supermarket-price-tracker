@@ -1,9 +1,12 @@
-from dataclasses import dataclass
-from typing import Optional, Any, List, TypeVar, Type, cast, Callable
-from enum import Enum
-from datetime import datetime
-import dateutil.parser
+# type: ignore
 
+
+from dataclasses import dataclass
+from datetime import datetime
+from enum import Enum
+from typing import Any, Callable, List, Optional, Type, TypeVar, cast
+
+import dateutil.parser
 
 T = TypeVar("T")
 EnumT = TypeVar("EnumT", bound=Enum)
