@@ -2,17 +2,35 @@
 name = "supermarket-price-tracker"
 version = "0.1.0"
 description = ""
-authors = ["roedebaron <45661813+roedebaron@users.noreply.github.com>"]
+authors = ["holstt"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.10"
 requests = "^2.29.0"
 python-dateutil = "^2.8.2"
-discord-webhook = "^1.1.0"
-python-dotenv = "^1.0.0"
 
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.pyright]
+typeCheckingMode = "strict"
+
+# In strict, but don't show these errors
+reportUnusedImport = "none"
+reportUnusedVariable = "none"
+reportUnusedFunction = "none"
+reportUnknownMemberType = "none"
+
+
+# Not in strict, but show these errors
+# reportMissingSuperCall = "error"
+reportCallInDefaultInitializer = "error"
+reportImplicitOverride = "info"
+reportImplicitStringConcatenation = "error"
+reportPropertyTypeMismatch = "error"
+reportShadowedImports = "error"
+reportUninitializedInstanceVariable = "error"
+reportUnnecessaryTypeIgnoreComment = "info"

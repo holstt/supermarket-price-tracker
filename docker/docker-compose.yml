@@ -1,12 +1,13 @@
 version: "3.8"
 
+name: supermarket-pricer-tracker
+
 services:
-  supermarket-pricer-tracker:
+  app:
     restart: "no" # Runs as script, not as service (right now)
     build:
       context: ..
       dockerfile: docker/Dockerfile
-    # volume for saving json files
     volumes:
       - ../data:/app/data
     environment:

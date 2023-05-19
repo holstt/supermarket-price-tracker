@@ -1,6 +1,6 @@
+# type: ignore
 from dataclasses import dataclass
-from typing import Any, List, TypeVar, Callable, Type, cast
-
+from typing import Any, Callable, List, Type, TypeVar, cast
 
 T = TypeVar("T")
 
@@ -38,7 +38,7 @@ class DepartmentCategoryDto:
     hidden: bool
 
     @staticmethod
-    def from_dict(obj: Any) -> 'DepartmentCategoryDto':
+    def from_dict(obj: Any) -> "DepartmentCategoryDto":
         assert isinstance(obj, dict)
         id = from_int(obj.get("id"))
         name = from_str(obj.get("name"))
@@ -60,7 +60,7 @@ class Extra:
     modules: List[Any]
 
     @staticmethod
-    def from_dict(obj: Any) -> 'Extra':
+    def from_dict(obj: Any) -> "Extra":
         assert isinstance(obj, dict)
         modules = from_list(lambda x: x, obj.get("modules"))
         return Extra(modules)
@@ -80,13 +80,12 @@ class RemaDepartmentDto:
     extra: Extra
 
     @staticmethod
-    def from_dict(obj: Any) -> 'RemaDepartmentDto':
+    def from_dict(obj: Any) -> "RemaDepartmentDto":
         assert isinstance(obj, dict)
         id = from_int(obj.get("id"))
         name = from_str(obj.get("name"))
         slug = from_str(obj.get("slug"))
-        categories = from_list(
-            DepartmentCategoryDto.from_dict, obj.get("categories"))
+        categories = from_list(DepartmentCategoryDto.from_dict, obj.get("categories"))
         extra = Extra.from_dict(obj.get("extra"))
         return RemaDepartmentDto(id, name, slug, categories, extra)
 
@@ -96,7 +95,8 @@ class RemaDepartmentDto:
         result["name"] = from_str(self.name)
         result["slug"] = from_str(self.slug)
         result["categories"] = from_list(
-            lambda x: to_class(DepartmentCategoryDto, x), self.categories)
+            lambda x: to_class(DepartmentCategoryDto, x), self.categories
+        )
         result["extra"] = to_class(Extra, self.extra)
         return result
 

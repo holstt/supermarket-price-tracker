@@ -2,15 +2,35 @@
 
 Scrape and analyze the prices of online supermarkets.
 
-## Features
+:warning: This is a work in progress. The program currently scrapes prices from the supermarket Rema1000 and stores them as json files at `./data/rema/<scrape_time>`
 
-- Web scrapes popular online supermarkets for product prices
-- Tracks price changes for individual products over time
-- Provides users with a visual representation of price trends for selected groceries
-- Allows users to specify a custom time period for price comparisons
-- Easy-to-use command-line interface
+#### Todo:
 
-## Currently supported supermarkets
+- [ ] Store scraped json files in a database
+- [ ] UI to view price changes for individual products over time
+- [ ] Subscribe on price changes and get notified on discord
+- [ ] Add more supermarkets
 
-- Rema1000
-- Føtex (coming soon)
+## Getting Started
+
+```bash
+# Clone the repo
+git clone https://github.com/holstt/supermarket-price-tracker.git
+cd supermarket-price-tracker
+
+# Use poetry to install dependencies and create a virtual environment
+poetry install
+poetry shell
+
+# Run the scraper
+python ./main.py
+```
+
+### Docker 🐳
+
+It is also possible to run the scraper in a docker container using Docker Compose:
+
+```bash
+cd docker
+docker-compose up -d
+```

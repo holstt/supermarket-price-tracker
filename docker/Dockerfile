@@ -18,4 +18,3 @@ COPY ./main.py .
 COPY ./src ./src
 
 ENTRYPOINT poetry run python main.py
-# ENTRYPOINT echo "Hello World"
