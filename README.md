@@ -6,10 +6,10 @@ Scrape and analyze the prices of online supermarkets.
 
 #### Todo:
 
-- [ ] Store scraped json files in a database
-- [ ] UI to view price changes for individual products over time
-- [ ] Subscribe on price changes and get notified on discord
-- [ ] Add more supermarkets
+-   [ ] Store scraped json files in a database
+-   [ ] UI to view price changes for individual products over time
+-   [ ] Subscribe on price changes and get notified on discord
+-   [ ] Add more supermarkets
 
 ## Getting Started
 
@@ -34,3 +34,5 @@ It is also possible to run the scraper in a docker container using Docker Compos
 cd docker
 docker-compose up -d
 ```
+
+The script run as a cron job as specified in `./cron`
