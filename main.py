@@ -1,15 +1,22 @@
 import asyncio
 import logging
+from pathlib import Path
 
 import src.utils as utils
-from src.rema.rema_scraper import scrape_and_save_rema
+from src.rema.client import RemaClient
+from src.rema.scraper import RemaScraper
+from src.storage import DataStorage
 
 logger = logging.getLogger(__name__)
 
 
 async def main():
-    # Save rema data to json.
-    await scrape_and_save_rema()
+    base_dir = Path("data")
+    STORE_NAME = "rema"
+    client = RemaClient()
+    storage = DataStorage(base_dir, STORE_NAME)
+    scraper = RemaScraper(storage, client)
+    await scraper.scrape()
 
 
 if __name__ == "__main__":
