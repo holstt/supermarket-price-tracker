@@ -22,8 +22,13 @@ cd supermarket-price-tracker
 poetry install
 poetry shell
 
+# (while in virtual environment)
+
 # Run the scraper
 python ./main.py
+
+# Run tests
+pytest
 ```
 
 ### Docker 🐳

@@ -1,10 +1,11 @@
-from unittest.mock import AsyncMock, Mock
+from unittest.mock import AsyncMock, Mock, create_autospec
 
 import pytest
 
 from src.rema.client import RemaClient
 from src.rema.scraper import RemaScraper
 from src.storage import DataStorage
+from src.waiter import Waiter
 from tests.dto_builders import DepartmentCategoryDtoBuilder, DepartmentDtoBuilder
 
 
@@ -20,17 +21,18 @@ async def test_data_storage_called_with_correct_args():
     test_data_to_save = {"some": "data"}
 
     # Mocks
-    mock_client = Mock(spec=RemaClient)
+    mock_client: RemaClient = create_autospec(spec=RemaClient)
     mock_client.fetch_departments = Mock(return_value=[test_department])
     mock_client.fetch_products_json = Mock(return_value=test_data_to_save)
 
-    mock_storage = Mock(spec=DataStorage)
+    mock_storage: DataStorage = create_autospec(spec=DataStorage)
     mock_storage.save_data = Mock()
 
-    wait_func = AsyncMock()
+    waiter: Waiter = create_autospec(Waiter)
+    waiter.estimate_total_wait = Mock(return_value=(1, 1))
 
     # Sut
-    scraper = RemaScraper(mock_storage, mock_client, wait_func)
+    scraper = RemaScraper(mock_storage, mock_client, waiter)
 
     # ACT
     await scraper.scrape()

@@ -6,16 +6,22 @@ import src.utils as utils
 from src.rema.client import RemaClient
 from src.rema.scraper import RemaScraper
 from src.storage import DataStorage
+from src.waiter import Waiter
 
 logger = logging.getLogger(__name__)
 
 
 async def main():
-    base_dir = Path("data")
+    INTERVAL_MIN_SECONDS = 5
+    INTERVAL_MAX_SECONDS = 20
     STORE_NAME = "rema"
+    DATA_PATH = "./data"
+
+    base_dir = Path(DATA_PATH)
     client = RemaClient()
     storage = DataStorage(base_dir, STORE_NAME)
-    scraper = RemaScraper(storage, client, asyncio.sleep)
+    waiter = Waiter(INTERVAL_MIN_SECONDS, INTERVAL_MAX_SECONDS)
+    scraper = RemaScraper(storage, client, waiter)
     await scraper.scrape()
 
 

@@ -1,31 +1,22 @@
-import asyncio
 import logging
 import random
-from datetime import datetime, timedelta, timezone
-from typing import Any, Callable, Coroutine
 
 from src.rema.client import RemaClient
 from src.rema.json_dtos.department_dto import RemaDepartmentDto
 from src.scraper import Scraper
 from src.storage import DataStorage
+from src.utils import get_utc_now
+from src.waiter import Waiter
 
 logger = logging.getLogger(__name__)
 
 
 class RemaScraper(Scraper):
-    INTERVAL_MIN_SECONDS = 5
-    INTERVAL_MAX_SECONDS = 20
-
-    def __init__(
-        self,
-        data_storage: DataStorage,
-        client: RemaClient,
-        wait_func: Callable[[float], Coroutine[Any, Any, None]],
-    ):
+    def __init__(self, data_storage: DataStorage, client: RemaClient, waiter: Waiter):
         super().__init__(data_storage)
         self._client = client
         self._data_storage = data_storage
-        self._wait_func = wait_func
+        self._waiter = waiter
 
     async def scrape(self):
         logger.info(f"Scraping started")
@@ -44,17 +35,18 @@ class RemaScraper(Scraper):
 
         random.shuffle(department_dtos)
 
-        estimated_fetch_duration, estimated_fetch_end_time = self._estimate_fetch_time(
-            total_categories
-        )
+        (
+            estimated_fetch_duration,
+            estimated_fetch_end_time,
+        ) = self._waiter.estimate_total_wait(total_categories)
         logger.info(
             f"Estimated fetch time: {estimated_fetch_duration} (End time: {estimated_fetch_end_time})"
         )
 
         # Start scraping departments
-        start_time = datetime.utcnow()
+        start_time = get_utc_now()
         await self._scrape_departments(department_dtos)
-        end_time = datetime.utcnow()
+        end_time = get_utc_now()
 
         # logger.info(f"--Products in category: {len(categoryDto.hits)}") # TODO: print num products and see if any product requests reaches 1000
         logger.info(
@@ -79,20 +71,4 @@ class RemaScraper(Scraper):
             file_name = f"dep_{department.id}_cat_{category.id}.json"
             logger.info(f"-- Saving to file: {file_name}")
             self._data_storage.save_data(file_name, category_products_json)
-            await self._wait()
-
-    async def _wait(self):
-        wait = random.uniform(self.INTERVAL_MIN_SECONDS, self.INTERVAL_MAX_SECONDS)
-        logger.info(f"Waiting {wait:.1f} seconds...")
-        await self._wait_func(wait)
-
-    def _estimate_fetch_time(self, total_categories: int):
-        estimated_fetch_duration = timedelta(
-            seconds=(
-                total_categories
-                * (self.INTERVAL_MIN_SECONDS + self.INTERVAL_MAX_SECONDS)
-            )
-            / 2
-        )
-        estimated_fetch_end_time = datetime.now(timezone.utc) + estimated_fetch_duration
-        return estimated_fetch_duration, estimated_fetch_end_time
+            await self._waiter.wait()
