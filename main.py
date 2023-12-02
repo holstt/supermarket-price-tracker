@@ -15,7 +15,7 @@ async def main():
     STORE_NAME = "rema"
     client = RemaClient()
     storage = DataStorage(base_dir, STORE_NAME)
-    scraper = RemaScraper(storage, client)
+    scraper = RemaScraper(storage, client, asyncio.sleep)
     await scraper.scrape()
 
 
