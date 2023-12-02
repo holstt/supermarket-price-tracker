@@ -1,5 +1,7 @@
 import asyncio
 import logging
+import random
+from datetime import timedelta
 from pathlib import Path
 
 import src.utils as utils
@@ -17,11 +19,16 @@ async def main():
     STORE_NAME = "rema"
     DATA_PATH = "./data"
 
-    base_dir = Path(DATA_PATH)
     client = RemaClient()
+    base_dir = Path(DATA_PATH)
     storage = DataStorage(base_dir, STORE_NAME)
-    waiter = Waiter(INTERVAL_MIN_SECONDS, INTERVAL_MAX_SECONDS)
-    scraper = RemaScraper(storage, client, waiter)
+    waiter = Waiter(
+        timedelta(seconds=INTERVAL_MIN_SECONDS),
+        timedelta(seconds=INTERVAL_MAX_SECONDS),
+        random.uniform,
+        asyncio.sleep,
+    )
+    scraper = RemaScraper(storage, client, waiter, utils.get_utc_now)
     await scraper.scrape()
 
 

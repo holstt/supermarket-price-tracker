@@ -1,5 +1,8 @@
 import logging
 import random
+import time
+from datetime import datetime
+from typing import Callable
 
 from src.rema.client import RemaClient
 from src.rema.json_dtos.department_dto import RemaDepartmentDto
@@ -12,11 +15,18 @@ logger = logging.getLogger(__name__)
 
 
 class RemaScraper(Scraper):
-    def __init__(self, data_storage: DataStorage, client: RemaClient, waiter: Waiter):
+    def __init__(
+        self,
+        data_storage: DataStorage,
+        client: RemaClient,
+        waiter: Waiter,
+        get_current_time: Callable[[], datetime],
+    ):
         super().__init__(data_storage)
         self._client = client
         self._data_storage = data_storage
         self._waiter = waiter
+        self._get_current_time = get_current_time
 
     async def scrape(self):
         logger.info(f"Scraping started")
@@ -35,12 +45,9 @@ class RemaScraper(Scraper):
 
         random.shuffle(department_dtos)
 
-        (
-            estimated_fetch_duration,
-            estimated_fetch_end_time,
-        ) = self._waiter.estimate_total_wait(total_categories)
+        estimated_fetch_duration = self._waiter.estimate_total_wait(total_categories)
         logger.info(
-            f"Estimated fetch time: {estimated_fetch_duration} (End time: {estimated_fetch_end_time})"
+            f"Estimated fetch time: {estimated_fetch_duration} (End time: {estimated_fetch_duration + self._get_current_time()})"
         )
 
         # Start scraping departments

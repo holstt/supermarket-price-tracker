@@ -1,3 +1,5 @@
+from datetime import timedelta
+from lib2to3.refactor import get_all_fix_names
 from unittest.mock import AsyncMock, Mock, create_autospec
 
 import pytest
@@ -5,6 +7,7 @@ import pytest
 from src.rema.client import RemaClient
 from src.rema.scraper import RemaScraper
 from src.storage import DataStorage
+from src.utils import get_utc_now
 from src.waiter import Waiter
 from tests.dto_builders import DepartmentCategoryDtoBuilder, DepartmentDtoBuilder
 
@@ -29,10 +32,12 @@ async def test_data_storage_called_with_correct_args():
     mock_storage.save_data = Mock()
 
     waiter: Waiter = create_autospec(Waiter)
-    waiter.estimate_total_wait = Mock(return_value=(1, 1))
+    waiter.estimate_total_wait = Mock(return_value=(timedelta(seconds=1)))
+
+    get_current_time = lambda: get_utc_now()
 
     # Sut
-    scraper = RemaScraper(mock_storage, mock_client, waiter)
+    scraper = RemaScraper(mock_storage, mock_client, waiter, get_current_time)
 
     # ACT
     await scraper.scrape()
