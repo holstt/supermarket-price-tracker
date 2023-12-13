@@ -12,15 +12,23 @@ python-dateutil = "^2.8.2"
 
 
 [tool.poetry.group.dev.dependencies]
+isort = "^5.13.2"
 pytest = "^7.4.3"
 pytest-asyncio = "^0.21.1"
+black = "^23.12.0"
+pyright = "^1.1.340"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
+[tool.isort]
+profile = "black"
+
 [tool.pyright]
 typeCheckingMode = "strict"
+pythonVersion = "3.10"
+
 
 # In strict, but don't show these errors
 reportUnusedImport = "none"
@@ -32,9 +40,9 @@ reportUnknownMemberType = "none"
 # Not in strict, but show these errors
 # reportMissingSuperCall = "error"
 reportCallInDefaultInitializer = "error"
-reportImplicitOverride = "info"
+reportImplicitOverride = "information"
 reportImplicitStringConcatenation = "error"
 reportPropertyTypeMismatch = "error"
 reportShadowedImports = "error"
 reportUninitializedInstanceVariable = "error"
-reportUnnecessaryTypeIgnoreComment = "info"
+reportUnnecessaryTypeIgnoreComment = "information"
