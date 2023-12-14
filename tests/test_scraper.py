@@ -1,5 +1,4 @@
 from datetime import timedelta
-from lib2to3.refactor import get_all_fix_names
 from unittest.mock import AsyncMock, Mock, create_autospec
 
 import pytest

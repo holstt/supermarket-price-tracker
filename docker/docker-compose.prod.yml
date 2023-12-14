@@ -1,0 +1,12 @@
+version: "3.8"
+
+name: supermarket-price-tracker
+
+# In prod set required env variables, then run:
+# docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+
+services:
+    app:
+        restart: "on-failure:5"
+        pull_policy: always # Ensure we always pull to get the latest image
+        image: ${DOCKER_REPO_NAME?}:latest-${GITHUB_REPO_NAME?}
