@@ -1,4 +1,5 @@
 # supermarket-price-tracker
+[![cicd](https://github.com/holstt/supermarket-price-tracker/actions/workflows/cicd.yml/badge.svg?branch=main)](https://github.com/holstt/supermarket-price-tracker/actions/workflows/cicd.yml)
 
 Scrape and analyze the prices of online supermarkets.
 
