@@ -46,7 +46,7 @@ jobs:
     build-and-push:
         needs: lint-and-test
         runs-on: ubuntu-latest
-        # if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         steps:
             - uses: actions/checkout@v3
             - uses: docker/setup-buildx-action@v3
