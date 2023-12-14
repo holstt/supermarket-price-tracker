@@ -1,0 +1,4 @@
+# Cron job runnning script at 12:00 AM every other day.
+0 0 */2 * * cd /app && /usr/local/bin/poetry run python main.py  >> /var/log/cron.log 2>&1
+# * * * * * cd /app && /usr/local/bin/poetry run python main.py  >> /var/log/cron.log 2>&1 # Testing cron job
+# Newline character is required at the end of this file for a valid cron file.

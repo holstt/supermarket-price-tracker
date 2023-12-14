@@ -6,7 +6,7 @@ logger = logging.getLogger(__name__)
 
 
 # get utc now timezone aware
-def get_utc_now():
+def get_utc_now() -> datetime:
     return datetime.now(timezone.utc)
 
 
