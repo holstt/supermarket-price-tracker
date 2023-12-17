@@ -9,4 +9,4 @@ services:
     app:
         restart: "on-failure:5"
         pull_policy: always # Ensure we always pull to get the latest image
-        image: ${DOCKER_REPO_NAME?}:latest-${GITHUB_REPO_NAME?}
+        image: ${DOCKER_REPO_NAME?}:latest-${TAG?}
